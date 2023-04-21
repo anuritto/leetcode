@@ -1,4 +1,4 @@
-package findallnumbersdisappearedinanarray
+package solution
 
 func findDisappearedNumbers(nums []int) []int {
 	max := len(nums)
