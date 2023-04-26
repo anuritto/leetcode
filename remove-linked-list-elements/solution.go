@@ -13,44 +13,17 @@ type ListNode struct {
  * }
  */
 func removeElements(head *ListNode, val int) *ListNode {
-	var prev *ListNode
-	current := head
-	for current != nil {
-		if current.Val == val {
-			if prev == nil {
-				head = head.Next
-			} else {
-				prev.Next = current.Next
-			}
-		} else {
-			prev = current
-		}
-
-		current = current.Next
-	}
-	return head
-}
-
-// with false head and without nill prev head check
-func removeElements2(head *ListNode, val int) *ListNode {
-	prevHead := &ListNode{
+	falseHead := &ListNode{
 		Next: head,
 	}
 
-	prev := prevHead
-	current := head
-
-	for current != nil {
-		if current.Val == val {
-			// skip this node
-			prev.Next = current.Next
+	current := falseHead
+	for current.Next != nil {
+		if current.Next.Val == val {
+			current.Next = current.Next.Next
 		} else {
-			// next iteration for prev point
-			prev = current
+			current = current.Next
 		}
-
-		// next iteration for current point
-		current = current.Next
 	}
-	return prevHead.Next
+	return falseHead.Next
 }
