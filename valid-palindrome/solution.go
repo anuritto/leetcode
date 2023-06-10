@@ -1,21 +1,24 @@
 package validpalindrome
 
-import "unicode"
+import (
+	"unicode"
+)
 
 func isPalindrome(s string) bool {
-	rs := []rune{}
-	for _, l := range s {
-		if unicode.IsLetter(l) || unicode.IsNumber(l) {
-			rs = append(rs, unicode.ToLower(l))
-		}
-	}
-	lowerStr := string(rs)
 
-	stringLengh := len(lowerStr)
-	for i := 0; i < stringLengh/2; i++ {
-		if lowerStr[i] != lowerStr[stringLengh - 1 -i] {
+	for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
+		for !(unicode.IsLetter(rune(s[i])) || unicode.IsNumber(rune(s[i]))) {
+			i++
+		}
+
+		for !(unicode.IsLetter(rune(s[j])) || unicode.IsNumber(rune(s[j]))) {
+			j--
+		}
+
+		if unicode.ToLower(rune(s[i])) != unicode.ToLower(rune(s[j])) {
 			return false
 		}
 	}
+
 	return true
 }
