@@ -2,6 +2,34 @@ package trappingrainwater
 
 func trap(heights []int) int {
 	n := len(heights)
+
+	left, right := 0, n-1
+	var leftMax, rightMax, res int
+	for left < right {
+		if heights[left] <= heights[right] {
+
+			if heights[left] < leftMax {
+				res += leftMax - heights[left]
+			} else {
+				leftMax = heights[left]
+			}
+			left++
+		} else {
+			if heights[right] < rightMax {
+				res += rightMax - heights[right]
+			} else {
+				rightMax = heights[right]
+			}
+			right--
+		}
+	}
+
+	return res
+}
+
+// left and right parts of maximum
+func trapOld(heights []int) int {
+	n := len(heights)
 	var maxInd, maxHeight int
 	for i := 0; i < n; i++ {
 		if heights[i] > maxHeight {
