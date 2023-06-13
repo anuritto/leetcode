@@ -12,7 +12,10 @@ func isValid(s string) bool {
 			continue
 		}
 
-		last := stk.last()
+		last, err := stk.last()
+		if err != nil {
+			return false
+		}
 		
 		switch {
 		case last == "(":
