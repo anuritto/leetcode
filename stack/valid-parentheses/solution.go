@@ -1,68 +1,38 @@
 package validparentheses
 
-import "errors"
+var bracketsPairs = map[rune]rune{
+	'(': ')',
+	'{': '}',
+	'[': ']',
+}
 
-func isValid(s string) bool {
-	stk := Stack{}
-	for _, sk := range s {
-		skstr := string(sk)
-		
-		if skstr == "(" || skstr == "[" || skstr == "{" {
-			stk.push(skstr)
+func isValid(str string) bool {
+	if len(str) == 0 || len(str)%2 == 1 {
+		return false
+	}
+
+	stk := []rune(str)
+
+	for _, br := range str {
+		if _, isOpening := bracketsPairs[br]; isOpening {
+			stk = append(stk, br)
+
 			continue
 		}
 
-		last, err := stk.last()
-		if err != nil {
+		n := len(stk)
+		if n == 0 {
 			return false
 		}
-		
-		switch {
-		case last == "(":
-			if skstr != ")" {
-				return false
-			}
 
-			break
+		lst := stk[n-1]
+		stk = stk[:n-1]
 
-		case last == "{":
-			if skstr != "}" {
-				return false
-			}
-
-			break
-
-		case last == "[":
-			if skstr != "]" {
-				return false
-			}
-
-			break
+		if closingBr := bracketsPairs[lst]; br != closingBr {
+			return false
 		}
 
 	}
 
-	if len(stk.stack) !=0 {
-		return false
-	}
 	return true
-}
-
-type Stack struct {
-	stack []string
-}
-
-func (s *Stack) last()( string, error) {
-	n := len(s.stack)
-
-	if n == 0 {
-		return "", errors.New("last of empty stack")
-	}
-	l := s.stack[n-1]
-	s.stack = s.stack[:n-1]
-	return l, nil
-}
-
-func (s *Stack) push(sk string) {
-	s.stack = append(s.stack, sk)
 }
