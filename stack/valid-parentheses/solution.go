@@ -11,7 +11,7 @@ func isValid(str string) bool {
 		return false
 	}
 
-	stk := []rune(str)
+	stk := []rune{}
 
 	for _, br := range str {
 		if _, isOpening := bracketsPairs[br]; isOpening {
@@ -31,7 +31,10 @@ func isValid(str string) bool {
 		if closingBr := bracketsPairs[lst]; br != closingBr {
 			return false
 		}
+	}
 
+	if len(stk) > 0 {
+		return false
 	}
 
 	return true
