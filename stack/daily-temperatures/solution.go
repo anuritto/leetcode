@@ -1,81 +1,33 @@
 package dailytemperatures
 
-import (
-	"errors"
-)
-
-type dayInfo struct {
-	index int
-	val   int
-}
-
-type dayInfoStack struct {
-	stk []dayInfo
-}
-
-func (this *dayInfoStack) push(day dayInfo) {
-	this.stk = append(this.stk, day)
-}
-
-func (this *dayInfoStack) pop() (dayInfo, error) {
-	n := len(this.stk)
-	if n == 0 {
-		return dayInfo{}, errors.New("empty stack")
-	}
-
-	this.stk = this.stk[:n-1]
-
-	return this.stk[n-1], nil
-}
-
-func (this *dayInfoStack) getLast() (dayInfo, error) {
-	n := len(this.stk)
-	if n == 0 {
-		return dayInfo{}, errors.New("empty stack")
-	}
-
-	return this.stk[n-1], nil
-}
-
-func (this *dayInfoStack) delLast() error {
-	n := len(this.stk)
-	if n == 0 {
-		return errors.New("empty stack")
-	}
-
-	this.stk = this.stk[:n-1]
-
-	return nil
-}
-
 func dailyTemperatures(temperatures []int) []int {
 	res := make([]int, len(temperatures))
-	stk := dayInfoStack{
-		stk: []dayInfo{},
-	}
+	indexes := []int{}
+	values := []int{}
 
 	for i := len(temperatures) - 1; i >= 0; i-- {
-		lastDay, notFound := stk.getLast()
-		currentDay := dayInfo{val: temperatures[i], index: i}
-
-		if notFound != nil {
-			stk.push(currentDay)
+		if len(values) == 0 {
+			indexes = append(indexes, i)
+			values = append(values, temperatures[i])
 			res[i] = 0
+			continue
 		}
-		var err error
+
 		for {
-			if lastDay.val > currentDay.val {
-				res[i] = lastDay.index - currentDay.index
-				stk.push(currentDay)
+			if temperatures[i] < values[len(values)-1] {
+				res[i] = indexes[len(indexes)-1] - i
+				values = append(values, temperatures[i])
+				indexes = append(indexes, i)
 				break
 			}
 
-			stk.delLast()
+			values = values[:len(values)-1]
+			indexes = indexes[:len(indexes)-1]
 
-			lastDay, err = stk.getLast()
-			if err != nil {
-				stk.push(currentDay)
+			if len(values) == 0 {
 				res[i] = 0
+				values = append(values, temperatures[i])
+				indexes = append(indexes, i)
 				break
 			}
 		}
