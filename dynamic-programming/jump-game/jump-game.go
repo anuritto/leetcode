@@ -1,5 +1,6 @@
 package jumpgame
 
+// calculation paths count for each element
 func canJump(nums []int) bool {
 	if len(nums) == 1 {
 		return true
