@@ -1,28 +1,18 @@
 package jumpgame
 
-// calculation paths count for each element
 func canJump(nums []int) bool {
-	if len(nums) == 1 {
-		return true
-	}
-
-	dp := make([]int, len(nums))
-
-	dp[0] = 1
+	
+	max := 0
 	for i := 0; i < len(nums); i++ {
-		num := nums[i]
-
-		if dp[i] == 0 {
+		if i > max {
 			return false
 		}
 
-		for j := i + 1; j < i+1+num && j < len(nums); j++ {
-
-			dp[j]++
+		if nums[i] + i > max {
+			max  = nums[i] + i
 		}
 	}
-
-	return dp[len(nums)-1] > 0
+	return true
 }
 
 // https://leetcode.com/problems/jump-game
